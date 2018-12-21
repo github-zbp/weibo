@@ -12,14 +12,17 @@
 		private $allPages;
 		private $url;
 		private $shownPage;
+		private $page_name;
 		
-		public function __construct($allRows,$pageRows,$shownPage=7){
+		public function __construct($allRows,$pageRows,$page_name="page",$url="",$shownPage=7){
 			$this->allRows=$allRows;
 			$this->pageRows=$pageRows;
 			$this->shownPage=$shownPage;
+			$this->page_name=$page_name;
 			$this->allPages=$this->getAllPages();
 			$this->currentPage=$this->getCurrentPage();
-			$this->url=$this->getUrl();
+			$this->url=$url?$this->getUrl($url):$this->getUrl();
+			
 		}
 		
 		public function limit(){
@@ -79,8 +82,8 @@
 		}
 		
 		private function getPageForm(){
-			$str="<form style='float:left;font-size:16px;margin:20px 50px;width:300px'>";
-			$str.="<div class='form-group'><div class='col-md-2'><select name='page' style='margin-top:3px'>";
+			$str="<form class='page-form' style='float:left;font-size:16px;margin:20px 50px;width:300px'>";
+			$str.="<div class='form-group'><div class='col-md-2'><select name='{$this->page_name}' style='margin-top:3px'>";
 			for($i=1;$i<=$this->allPages;$i++){
 				$str.=$this->currentPage==$i?"<option value='{$i}'  selected>{$i}</option>":"<option value='{$i}'>{$i}</option>";
 			}
@@ -94,10 +97,10 @@
 			$str="";
 			switch($page){
 				case 1:
-					$str=$this->currentPage==1?"<li><a>首页</a></li>":"<li><a href='{$this->url}&page=1'>首页</a></li>";
+					$str=$this->currentPage==1?"<li><a page='1'>首页</a></li>":"<li><a page='1' href='{$this->url}&{$this->page_name}=1'>首页</a></li>";
 				break;
 				case $this->allPages:
-					$str=$this->currentPage==$this->allPages?"<li><a>尾页</a></li>":"<li><a href='{$this->url}&page={$this->allPages}'>尾页</a></li>";
+					$str=$this->currentPage==$this->allPages?"<li><a page='{$this->allPages}'>尾页</a></li>":"<li><a page='{$this->allPages}' href='{$this->url}&{$this->page_name}={$this->allPages}'>尾页</a></li>";
 				break;
 				default:return false;	
 			}
@@ -107,9 +110,9 @@
 		
 		private function getTextLi($page,$text){
 			if($page<1 || $page>$this->allPages){
-				$li="<li><a>{$text}</a></li>";
+				$li="<li><a page='{$page}'>{$text}</a></li>";
 			}else{
-				$li="<li><a href='{$this->url}&page={$page}'>{$text}</a></li>";
+				$li="<li><a page='{$page}' href='{$this->url}&{$this->page_name}={$page}'>{$text}</a></li>";
 			}
 			
 			return $li;
@@ -117,23 +120,23 @@
 		
 		private function getNumLi($page){
 			if($this->currentPage==$page){
-				$li="<li><a>{$page}</a></li>";
+				$li="<li><a page='{$page}'>{$page}</a></li>";
 			}else{
-				$li="<li><a href='{$this->url}&page={$page}'>{$page}</a></li>";
+				$li="<li><a page='{$page}' href='{$this->url}&{$this->page_name}={$page}'>{$page}</a></li>";
 			}
 			
 			return $li;
 		}
 		
-		private function getUrl(){
-			$url=$_SERVER["REQUEST_URI"];
+		private function getUrl($url=""){
+			$url=$url?$url:$_SERVER["REQUEST_URI"];
 			$urlArr=parse_url($url);
 			
 			if(isset($urlArr["query"])){	//判断url中是否有参数
 				parse_str($urlArr["query"],$query);
 				
-				if(array_key_exists("page",$query)){	//如果有page参数，干掉他，在拼接成完整的最终的url;没有page参数，则最终的url就是原来的url
-					unset($query["page"]);
+				if(array_key_exists($this->page_name,$query)){	//如果有page参数，干掉他，在拼接成完整的最终的url;没有page参数，则最终的url就是原来的url
+					unset($query[$this->page_name]);
 					$queryStr=http_build_query($query);
 					$url=$urlArr["path"]."?".$queryStr;
 				}
@@ -150,8 +153,8 @@
 		}
 		
 		private function getCurrentPage(){
-			if(!empty($_GET["page"])){
-				$page=$_GET["page"];
+			if(!empty($_GET[$this->page_name])){
+				$page=$_GET[$this->page_name];
 				
 				if($page<1){
 					$page=1;

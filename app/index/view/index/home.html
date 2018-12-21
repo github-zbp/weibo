@@ -1,0 +1,88 @@
+{include file="../common/head.html"}
+<div>
+	<div id="postform">
+		<form method="POST" action="/index/index/post">
+		<h3>{$name}, 有啥感想?</h3>
+		<div class="form-group">
+			<input type="text" class="form-control" name="title" placeholder="主题" required>
+		</div>
+		<div class="form-group">
+			<textarea class="form-control" name="content" rows="10" placeholder="内容"    required ></textarea>
+		</div> 
+		<button type="submit" class="btn btn-primary pull-right">发表</button>
+		</form>
+		<div style="clear:both"></div>
+		<div id="homeinfobox">
+			<a href="/index/index/fans" class="btn btn-primary btn-sm">{$fans_num} 粉丝</a>
+			<a href="/index/index/fans" class="btn btn-warning btn-sm">{$stars_num} 关注</a>
+		</div>
+	</div>
+	<div style="height:30px"></div>
+	<div>
+	  <!-- Nav tabs -->
+	  <ul class="nav nav-tabs" id="myTabs" role="tablist">
+		<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">我的微博</a></li>
+		<li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">关注者微博</a></li>
+		<li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">私&nbsp;&nbsp;&nbsp;&nbsp;信</a></li>
+		<!-- <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li> -->
+	  </ul>
+
+	  <!-- Tab panes -->
+	  <div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="home">
+		{foreach $my_wb as $w}
+			<div class="post col-md-12" style="padding:15px;font-size:18px;border:1px solid #ccc;border-radius:10px;margin:15px 0">
+				<div>
+					<h3>{$w['title']}</h3>
+					<p>发表人:<a class="username" {if $w['user_id'] != $uid}href="/index/index/profile?user_id={$w['user_id']}"{/if}>{$w['user_name']}</a></p>
+				</div>
+
+				<p>{$w['content']}</p>
+				<i>{timeformat($w['create_time'])} 前 发布</i>
+			</div>
+		{foreachelse}
+			<div class="post col-md-12" style="padding:15px;font-size:40px;">
+				<h2 style="color:grey" class="text-center">暂无文章，快去发表吧</h2>
+			</div>
+		{/foreach}
+		<div style="clear:both"></div>
+		 <div>{$links}</div>
+		</div>
+		
+		<div role="tabpanel" class="tab-pane" id="profile">
+			<div class="tab-post">
+				{foreach $stars_wb as $w}
+				<div class="post col-md-12" style="padding:15px;font-size:18px;border:1px solid #ccc;border-radius:10px;margin:15px 0">
+					<div>
+						<h3>{$w['title']}</h3>
+						<p>发表人:<a class="username" href="/index/index/profile?user_id={$w['user_id']}">{$w['user_name']}</a></p>
+					</div>
+
+					<p>{$w['content']}</p>
+					<i>{timeformat($w['create_time'])} 前 发布</i>
+				</div>
+			{foreachelse}
+				<div class="post col-md-12" style="padding:15px;font-size:40px;">
+					<h2 style="color:grey" class="text-center">暂无文章</h2>
+				</div>
+			{/foreach}
+			</div>
+		<div style="clear:both"></div>
+		 <div class="page-wraper">{$s_links}</div>
+		</div>
+		
+		
+	  </div>
+
+	</div>
+	
+</div>
+
+<script>
+
+$('#myTabs a').click(function (e) {
+  e.preventDefault()
+  $(this).tab('show')
+})
+</script>
+{include file="../common/footer.html"}

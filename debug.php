@@ -16,8 +16,9 @@
             break;
             default:define("DEBUG_LEVEL",intval(DEBUG));
         }
+		
     }
-    
+	
     if(DEBUG){
         ini_set("display_errors","On");
     }else{

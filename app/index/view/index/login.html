@@ -1,46 +1,90 @@
 {include file="../common/head.html"}
-<body>
-<div id="page">
-<div id="header">
-<a href="/"><img style="border:none" src="/static/images/logo.png" width="192" height="85" alt="Retwis"></a>
-<div id="navbar">
-</div>
-</div>
-<div id="welcomebox">
-<div id="registerbox">
-<h2>注册!</h2>
-<b>想试试Retwis? 请注册账号!</b>
-<form method="POST" action="/index/index/doRegister">
-<table>
-<tr>
-  <td>用户名</td><td><input type="text" name="name" required></td>
-</tr>
-<tr>
-  <td>密码</td><td><input type="password" name="password" required></td>
-</tr>
-<tr>
-  <td>密码(again)</td><td><input type="password" name="password2" required></td>
-</tr>
-<tr>
-<td colspan="2" align="right"><input type="submit" name="doit" value="注册"></td></tr>
-</table>
+
+<form method="POST" id='f1' action="/index/index/doRegister">
+<h3>注册</h3>
+  <div class="form-group">
+    <label for="exampleInputEmail1">用户名</label>
+    <input type="text" class="form-control" name="name" id="exampleInputEmail1" placeholder="用户名" required>
+  </div>
+  <div class="form-group">
+    <label for="p1">密码</label>
+    <input type="password" class="form-control" name="password" id="p1" placeholder="密码" required>
+  </div>
+ <div class="form-group">
+    <label for="p2">重复密码</label>
+    <input type="password" class="form-control" id="p2" placeholder="重复密码" required>
+  </div>
+  
+  <button type="button" id="b1" class="btn btn-primary">注册</button>
 </form>
-<h2>已经注册了? 请直接登陆</h2>
+<hr/>
 <form method="POST" action="/index/index/doLogin">
-<table><tr>
-  <td>用户名</td><td><input type="text" name="name" required></td>
-  </tr><tr>
-  <td>密码:</td><td><input type="password" name="password" required></td>
-  </tr><tr>
-  <td colspan="2" align="right"><input type="submit" name="doit" value="Login"></td>
-</tr></table>
+<h3>登陆</h3>
+  <div class="form-group">
+    <label for="exampleInputEmail1">用户名</label>
+    <input type="text" class="form-control" name="name" id="exampleInputEmail1" placeholder="用户名" required>
+  </div>
+  <div class="form-group">
+    <label>密码</label>
+    <input type="password" class="form-control" name="password" placeholder="密码" required>
+  </div>
+  
+  <button type="submit" class="btn btn-primary">登陆</button>
 </form>
-</div>
-介绍! Retwis  是一个简单的<a href="http://twitter.com">Twitter</a>克隆, 也是<a href="http://code.google.com/p/redis/">Redis</a> key-value 数据库的一个使用安全. 关键点:
-<ul>
-<li>Redis 是一种key-value 数据库, 而且是本项目中 <b>唯一</b>使用的数据库, 没有用mysql等.</li>
-<li>应用程序可以通过一致性哈希轻易的部署多台服务器</li>
-<li>PHP与redis服务器的连接用pecl的官方扩展<a href="pecl.php.net/package/redis">php-redis</a>
-</ul>
-</div>
+<!-- <div id="welcomebox"> -->
+<!-- <div id="registerbox"> -->
+<!-- <h2>注册!</h2> -->
+<!-- <b>想试试Retwis? 请注册账号!</b> -->
+<!-- <form method="POST" id='f1' action="/index/index/doRegister"> -->
+<!-- <table> -->
+<!-- <tr> -->
+  <!-- <td>用户名</td><td><input type="text" name="name" required></td> -->
+<!-- </tr> -->
+<!-- <tr> -->
+  <!-- <td>密码</td><td><input type="password" name="password" id='p1' required></td> -->
+<!-- </tr> -->
+<!-- <tr> -->
+  <!-- <td>密码(again)</td><td><input type="password" id='p2' required></td> -->
+<!-- </tr> -->
+<!-- <tr> -->
+<!-- <td colspan="2" align="right"><input type="button" id="b1" name="doit" value="注册"></td></tr> -->
+<!-- </table> -->
+<!-- </form> -->
+<!-- <h2>已经注册了? 请直接登陆</h2> -->
+<!-- <form method="POST" action="/index/index/doLogin"> -->
+<!-- <table><tr> -->
+  <!-- <td>用户名</td><td><input type="text" name="name" required></td> -->
+  <!-- </tr><tr> -->
+  <!-- <td>密码:</td><td><input type="password" name="password" required></td> -->
+  <!-- </tr><tr> -->
+  <!-- <td colspan="2" align="right"><input type="submit" name="doit" value="Login"></td> -->
+<!-- </tr></table> -->
+<!-- </form> -->
+<!-- </div> -->
+<!-- 介绍! Retwis  是一个简单的<a href="http://twitter.com">Twitter</a>克隆, 也是<a href="http://code.google.com/p/redis/">Redis</a> key-value 数据库的一个使用安全. 关键点: -->
+<!-- <ul> -->
+<!-- <li>Redis 是一种key-value 数据库, 而且是本项目中 <b>唯一</b>使用的数据库, 没有用mysql等.</li> -->
+<!-- <li>应用程序可以通过一致性哈希轻易的部署多台服务器</li> -->
+<!-- <li>PHP与redis服务器的连接用pecl的官方扩展<a href="pecl.php.net/package/redis">php-redis</a> -->
+<!-- </ul> -->
+<!-- </div> -->
+
+<script>
+window.onload=function(){
+	var p1=document.getElementById("p1");
+	var p2=document.getElementById("p2");
+	var f1=document.getElementById("f1");
+	var b1=document.getElementById("b1");
+	
+	b1.onclick=function(){
+		if(p1.value != p2.value){
+			alert("两次密码输入不同");
+			return false;
+		}
+		f1.submit();
+	}
+
+}
+
+</script>
 {include file="../common/footer.html"}

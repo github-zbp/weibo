@@ -1,0 +1,60 @@
+{include file="../common/head.html"}
+<div>
+	<h2 class="username">{$name}</h2>
+	{if $id != $user['id']}
+		<a data-uid="{$id}" class="btn btn-primary btn-sm dofan" {if in_array($id,$star_ids)}style="display:none"{/if}> <big><b>+</b></big> 关注</a>
+		<a data-uid="{$id}" class="btn btn-danger btn-sm unfan" {if !in_array($id,$star_ids)} style="display:none" {/if}> 取消关注</a> 
+	{/if}
+	<div style="clear:both;height:30px"></div>
+	<div style="clear:both">
+		<h3>Ta 的粉丝( 显示前 50 个 )</h3>
+		<div id="homeinfobox">
+			<a href="#" class="btn btn-primary btn-sm">{$fans_num} 粉丝</a>
+		</div>
+		<div style="height:40px"></div>
+		{foreach $f as $uid => $n}
+		<div class="fans-list">
+			<div class="col-md-3" style="margin:10px 0">
+				<div class="fans-name col-md-4" style="line-height:33px;font-size:20px"><a href="/index/index/profile?user_id={$uid}">{$n}</a></div>
+				<div class="col-md-8">
+				{if $user['id'] == $id}
+					<a href="/index/index/msg?user_id={$uid}" class="btn btn-default btn-sm"><big><b>@</b></big> 私 信</a>
+					<a data-uid="{$uid}" class="btn btn-primary btn-sm dofan"><big><b>+</b></big> 关 注</a>
+				{/if}
+				</div>
+				
+			</div>
+			
+		</div>
+		{/foreach}
+	</div>
+	
+	<div style="clear:both;height:30px"></div>
+	<div style="clear:both">
+		<h3>Ta 的关注</h3>
+		<div id="homeinfobox">
+			<a href="#" class="btn btn-warning btn-sm">{$stars_num} 关注</a>
+		</div>
+		
+		<div style="height:40px"></div>
+		{foreach $s as $uid => $n}
+		<div class="fans-list">
+			<div class="col-md-3" style="margin:10px 0">
+				<div class="fans-name col-md-4" style="line-height:33px;font-size:20px"><a href="/index/index/profile?user_id={$uid}">{$n}</a></div>
+				<div class="col-md-8">
+					{if $user['id'] == $id}
+					<a href="/index/index/msg?user_id={$uid}" class="btn btn-default btn-sm"><big><b>@</b></big> 私 信</a>
+					
+						<a data-uid="{$uid}" class="btn btn-danger btn-sm unfan">取消关注</a>
+					{/if}
+				</div>
+				
+			</div>
+			
+		</div>
+		{/foreach}
+		
+	</div>
+</div>
+<div style="clear:both"></div>
+{include file="../common/footer.html"}

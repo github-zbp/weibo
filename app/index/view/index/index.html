@@ -1,30 +1,55 @@
 {include file="../common/head.html"}
-<body>
-<div id="page">
-<div id="header">
-<a href="/"><img style="border:none" src="/static/images/logo.png" width="192" height="85" alt="Retwis"></a>
-<div id="navbar">
-<a href="index.php">主页</a>
-| <a href="timeline.php">热点</a>
-| <a href="logout.php">退出</a>
+
+<div>
+<h2><b>热点</b></h2>
+<p style="font-size:18px">欢迎新用户 &nbsp;&nbsp;&nbsp;<a id="hide-user" class="btn btn-default btn-xs">隐藏</a><a id="show-user" class="btn btn-primary btn-xs" style='display:none'>显示</a></p>
+<div class="new-user">
+{foreach $users as $u}
+	<div class="username col-md-3" style="line-height:50px;">
+		<div class="col-md-4" style="font-size:20px">
+			<a {if !empty($user) && $user["id"]==$u["id"]} href='/index/index/home' {else} href='/index/index/profile?user_id={$u["id"]}' {/if}>{$u['name']}</a>
+		</div>
+		<div class="col-md-4">
+			{if !empty($user) && $user["id"]!=$u["id"]}
+				<a data-uid='{$u["id"]}' class="btn btn-primary btn-sm dofan" {if in_array($u["id"],$star_ids)}style="display:none"{/if}> <big><b>+</b></big> 关注</a>
+				<a data-uid='{$u["id"]}' class="btn btn-danger btn-sm unfan" {if !in_array($u["id"],$star_ids)} style="display:none" {/if}> 取消关注</a> 
+				
+			{/if}
+		</div>
+	</div> 
+{/foreach}
+	
 </div>
+<div style="clear:both;height:30px"></div>
+<div style="clear:both">
+<h3>最新的1000条微博</h3>
+{foreach $posts as $post}
+<div class="post col-md-12" style="font-size:18px;border:1px solid #ccc;border-radius:10px;margin:15px 0">
+<div>
+	<h3>{$post['title']}</h3>
+	<p>发表人:<a class="username" {if !empty($user) && $user["id"]!=$post["user_id"]}href="/index/index/profile?user_id={$post['user_id']}" {/if}>{$post['user_name']}</a></p>
 </div>
-<div id="postform">
-<form method="POST" action="post.php">
-xxx, 有啥感想?
-<br>
-<table>
-<tr><td><textarea cols="70" rows="3" name="status"></textarea></td></tr>
-<tr><td align="right"><input type="submit" name="doit" value="Update"></td></tr>
-</table>
-</form>
-<div id="homeinfobox">
-0 粉丝<br>
-0 关注<br>
+
+<p>{$post['content']}</p>
+<i>{timeformat($post['create_time'])} 前 发布</i>
 </div>
+{/foreach}
+<div style="clear:both"></div>
+<div>{$links}</div>
+
 </div>
-<div class="post">
-<a class="username" href="profile.php?u=test">test</a> hello<br>
-<i>11 分钟前 通过 web发布</i>
-</div>
+
+<script>
+	$("#hide-user").click(function(){
+		$(".new-user").slideUp();
+		$("#show-user").show();
+		$(this).hide();
+	});
+	
+	$("#show-user").click(function(){
+		$(".new-user").slideDown();
+		$("#hide-user").show();
+		$(this).hide();
+	});
+</script>
 {include file="../common/footer.html"}

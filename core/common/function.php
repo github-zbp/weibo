@@ -8,12 +8,15 @@
 			}
 		}
 		
-		if(!$redirection && isset($_SERVER["HTTP_REFERER"])){
-			$redirection=$_SERVER["HTTP_REFERER"];
-		}else{
-			echo "<script>alert('{$msg}');history.go(-1)</script>";
-		
-			die;
+		if(!$redirection){
+			if(isset($_SERVER["HTTP_REFERER"])){
+				$redirection=$_SERVER["HTTP_REFERER"];
+			}else{
+				echo "<script>alert('{$msg}');history.go(-1)</script>";
+			
+				die;
+			}
+			
 		}
 		
 		echo "<script>alert('{$msg}');location.href='{$redirection}'</script>";
@@ -130,6 +133,27 @@
 		}else{
 			$info="<script>alert('兄弟你是直接进入这个页面的吧...');history.go(-1);</script>";
 			return false;
+		}
+	}
+	
+	function create_salt(){
+		$str="1234567890qwertyuiopasdfghjlzxcvb!@#$%^&*()";
+		$salt=md5(str_shuffle($str));
+		
+		return $salt;
+	}
+	
+	function timeFormat($timestamp){
+		$diff=time()-$timestamp;
+		
+		if($diff >= 86400){
+			return ceil($diff/86400)."天";
+		}elseif($diff>3600){
+			return ceil($diff/3600)."小时";
+		}elseif($diff>60){
+			return ceil($diff/60)."分钟";
+		}else{
+			return ceil($diff)."秒";
 		}
 	}
 ?>

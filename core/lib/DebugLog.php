@@ -29,7 +29,11 @@
         
         //只在页面初始化类中调用
         public static function init(){
-            if(!self::$instance){
+            if(!DEBUG_LEVEL){
+				return false;
+			}
+			
+			if(!self::$instance){
                 self::$instance=new self();
                 self::$instance->logId=microtime();
             }

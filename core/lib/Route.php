@@ -21,11 +21,11 @@
             
             //读取路由配置
             self::$config=Conf::get(self::CONFIG_NAME);
-            
             if(isset($_SERVER['REQUEST_URI']) && trim($_SERVER['REQUEST_URI'],"/")){
                 include(ROUTE_ALIAS);
                 $path=trim($_SERVER['REQUEST_URI'],"/");
 				$path=explode("?",$path)[0];
+				
                 foreach(self::$alias as $k=>$v){
                     if(strpos($path,$k) === 0){
                         $path=str_replace($k,$v,$path);
@@ -35,17 +35,21 @@
                 
                 $pathArr=explode("/",$path);
                 //当$_SERVER['REQUEST_URI']是/index而非/index/index时，$pathArr[0]是有的。
-                if(isset($pathArr[0])){
+                if(!empty($pathArr[0])){
                     self::$module=$pathArr[0];
                     unset($pathArr[0]);
-                }
-                if(isset($pathArr[1])){
+                }else{
+					self::$module=self::$config["default_module"];
+				}
+				
+                if(!empty($pathArr[1])){
                     self::$controller=$pathArr[1];
                     unset($pathArr[1]);
                 }else{
                     self::$controller=self::$config["default_controller"];
                 }
-                if(isset($pathArr[2])){
+				
+                if(!empty($pathArr[2])){
                     self::$action=$pathArr[2];
                     unset($pathArr[2]);
                 }else{
@@ -66,6 +70,7 @@
                 self::$controller=self::$config["default_controller"];
                 self::$action=self::$config["default_action"];
             }
+			
         }
         
         public static function alias($alias,$route){
